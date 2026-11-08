@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Teacher registration · Quiz Portal{% endblock %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Teacher registration</h1>
+  <p class="sub">Create your teacher account. You can log in right away.</p>
+  <form method="post" novalidate>{% csrf_token %}
+    {% if form.non_field_errors %}<div class="msg error">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="two">
+      {% include "_field.html" with field=form.first_name %}
+      {% include "_field.html" with field=form.last_name %}
+      {% include "_field.html" with field=form.username %}
+      {% include "_field.html" with field=form.email %}
+      {% include "_field.html" with field=form.password1 %}
+      {% include "_field.html" with field=form.password2 %}
+    </div>
+    <p><button class="btn" type="submit">Create account</button></p>
+  </form>
+  <p class="muted">Already registered? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock %}

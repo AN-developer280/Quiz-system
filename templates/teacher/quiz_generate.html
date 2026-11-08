@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Generate quiz{% endblock %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<p><a href="{% url 'quizzes:teacher_dashboard' %}">&larr; Dashboard</a></p>
+<div class="card">
+  <h1>Generate quiz with AI</h1>
+  <p class="sub">The quiz is saved as a draft first. You can review and edit it before publishing.</p>
+  <form method="post" id="genform" novalidate>{% csrf_token %}
+    {% if form.non_field_errors %}<div class="msg error">{{ form.non_field_errors }}</div>{% endif %}
+    {% include "_field.html" with field=form.topic %}
+    {% include "_field.html" with field=form.title %}
+    <div class="two">
+      {% include "_field.html" with field=form.num_questions %}
+      {% include "_field.html" with field=form.difficulty %}
+    </div>
+    {% include "_field.html" with field=form.time_limit_minutes %}
+    {% include "_field.html" with field=form.instructions %}
+    <p><button class="btn" type="submit" id="genbtn">Generate quiz</button></p>
+    <div class="loading" id="loading">Generating questions, this can take up to a minute…</div>
+  </form>
+</div>
+<script>
+document.getElementById('genform').addEventListener('submit',function(){
+  var b=document.getElementById('genbtn');b.disabled=true;b.textContent='Generating…';
+  document.getElementById('loading').style.display='block';
+});
+</script>
+{% endblock %}

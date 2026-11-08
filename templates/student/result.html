@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Result · {{ attempt.quiz.title }}{% endblock %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<p><a href="{{ back_link }}">&larr; Back</a></p>
+<div class="card" style="text-align:center">
+  <h1>{{ attempt.quiz.title }}</h1>
+  {% if teacher_view %}<p class="muted">Student: {{ attempt.student.display_name }}</p>{% endif %}
+  <div class="score" style="color:{% if attempt.percentage >= 50 %}var(--ok){% else %}var(--bad){% endif %}">{{ attempt.score }} / {{ attempt.total }}</div>
+  <p class="muted">{{ attempt.percentage }}% · submitted {{ attempt.submitted_at|date:"d M Y, H:i" }}</p>
+</div>
+{% for r in rows %}
+<div class="q">
+  <h3>{{ forloop.counter }}. {{ r.question.text }}
+    {% if r.selected_id is None %}<span class="badge b-mute">Not answered</span>{% elif r.correct %}<span class="badge b-ok">Correct</span>{% else %}<span class="badge b-bad">Wrong</span>{% endif %}</h3>
+  {% for c in r.choices %}
+    <div class="opt {% if c.is_correct %}right{% elif c.id == r.selected_id %}wrong{% endif %}" style="cursor:default">
+      {{ c.text }}{% if c.is_correct %} <b>✓ correct</b>{% elif c.id == r.selected_id %} <b>✗ your answer</b>{% endif %}
+    </div>
+  {% endfor %}
+  {% if r.question.explanation %}<div class="expl">{{ r.question.explanation }}</div>{% endif %}
+</div>
+{% endfor %}
+{% endblock %}

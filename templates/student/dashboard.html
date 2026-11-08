@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Student dashboard{% endblock %}
+{% block content %}
+<h1>Hello, {{ user.display_name }}</h1>
+<p class="sub">Quizzes published by teachers are listed below.</p>
+<h2>Available quizzes</h2>
+<div class="grid g2" style="margin-bottom:24px">
+{% for q in available %}
+  <div class="card" style="margin:0">
+    <div class="row between"><b>{{ q.title }}</b>{% if q.attempt %}<span class="badge b-warn">In progress</span>{% endif %}</div>
+    <p class="muted" style="margin:4px 0 12px">{{ q.topic }} · {{ q.get_difficulty_display }} · {{ q.q_count }} questions ·
+      {% if q.time_limit_minutes %}{{ q.time_limit_minutes }} min{% else %}no time limit{% endif %}<br>by {{ q.teacher.display_name }}</p>
+    <a class="btn" href="{% url 'quizzes:quiz_take' q.pk %}">{% if q.attempt %}Continue{% else %}Start quiz{% endif %}</a>
+  </div>
+{% empty %}<div class="card muted" style="margin:0">No quizzes available right now. Check back later.</div>{% endfor %}
+</div>
+<div class="card"><h2>My results</h2>
+{% if history %}
+<table><tr><th>Quiz</th><th>Score</th><th>%</th><th>Date</th><th></th></tr>
+{% for a in history %}<tr><td>{{ a.quiz.title }}</td><td>{{ a.score }} / {{ a.total }}</td><td>{{ a.percentage }}%</td>
+<td>{{ a.submitted_at|date:"d M Y, H:i" }}</td><td class="right"><a class="btn sm sec" href="{% url 'quizzes:student_result' a.pk %}">Review</a></td></tr>{% endfor %}
+</table>
+{% else %}<p class="muted">You have not completed any quiz yet.</p>{% endif %}
+</div>
+{% endblock %}

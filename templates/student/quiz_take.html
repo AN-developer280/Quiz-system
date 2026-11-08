@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ quiz.title }}{% endblock %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+{% if remaining is not None %}<div class="timer" id="timer">--:--</div>{% endif %}
+<h1>{{ quiz.title }}</h1>
+<p class="sub">{{ quiz.topic }} · {{ questions|length }} questions · You can attempt this quiz only once.</p>
+<form method="post" id="quizform">{% csrf_token %}
+{% for q in questions %}
+  <div class="q"><h3>{{ forloop.counter }}. {{ q.text }}</h3>
+    {% for c in q.choices.all %}
+      <label class="opt"><input type="radio" name="q_{{ q.pk }}" value="{{ c.pk }}"> <span>{{ c.text }}</span></label>
+    {% endfor %}
+  </div>
+{% endfor %}
+<button class="btn" type="submit" onclick="return window.__auto || confirm('Submit your answers? You cannot change them afterwards.')">Submit quiz</button>
+</form>
+{% if remaining is not None %}
+<script>
+(function(){
+  var left={{ remaining }}, el=document.getElementById('timer'), form=document.getElementById('quizform');
+  function tick(){
+    var m=Math.floor(left/60), s=left%60;
+    el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    if(left<=60) el.classList.add('low');
+    if(left<=0){ window.__auto=true; form.submit(); return; }
+    left--; setTimeout(tick,1000);
+  }
+  tick();
+})();
+</script>
+{% endif %}
+{% endblock %}

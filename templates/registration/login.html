@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login · Quiz Portal{% endblock %}
+{% block wrapclass %}narrow{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Login</h1>
+  <p class="sub">Students and approved teachers.</p>
+  <form method="post">{% csrf_token %}
+    {% if form.non_field_errors %}<div class="msg error">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>{% endif %}
+    {% include "_field.html" with field=form.username %}
+    {% include "_field.html" with field=form.password %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <p><button class="btn" type="submit">Login</button></p>
+  </form>
+  <p class="muted">New here? <a href="{% url 'register_student' %}">Register as student</a> · <a href="{% url 'register_teacher' %}">Register as teacher</a></p>
+</div>
+{% endblock %}

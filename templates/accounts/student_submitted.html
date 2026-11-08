@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block wrapclass %}narrow{% endblock %}
+{% block content %}
+<div class="card" style="text-align:center">
+  <h1>Registration received</h1>
+  <p>Your registration is awaiting your teacher's approval. You will receive an email after a decision.</p>
+  <p class="muted">You do not need to stay on the website.</p>
+  <a class="btn sec" href="{% url 'login' %}">Go to login</a>
+</div>
+{% endblock %}

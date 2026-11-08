@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My students{% endblock %}
+{% block content %}
+<h1>My students</h1>
+<p class="sub">Approve or reject students who registered under you.</p>
+<div class="tabs">
+  <a class="{% if current == 'PENDING' %}on{% endif %}" href="?status=PENDING">Pending ({{ counts.PENDING }})</a>
+  <a class="{% if current == 'APPROVED' %}on{% endif %}" href="?status=APPROVED">Approved ({{ counts.APPROVED }})</a>
+  <a class="{% if current == 'REJECTED' %}on{% endif %}" href="?status=REJECTED">Rejected ({{ counts.REJECTED }})</a>
+</div>
+<div class="card">
+{% if students %}
+<table>
+  <tr><th>Name</th><th>Email</th><th>Registered</th><th>Status</th><th></th></tr>
+  {% for s in students %}
+  <tr><td>{{ s.display_name }}</td><td>{{ s.email }}</td><td>{{ s.date_joined|date:"d M Y" }}</td>
+    <td><span class="badge {% if s.is_approved %}b-ok{% elif s.is_rejected %}b-bad{% else %}b-warn{% endif %}">{{ s.get_status_display }}</span></td>
+    <td class="right"><a class="btn sm sec" href="{% url 'student_detail' s.pk %}">Review</a></td></tr>
+  {% endfor %}
+</table>
+{% else %}<p class="muted">Nothing here.</p>{% endif %}
+</div>
+{% endblock %}

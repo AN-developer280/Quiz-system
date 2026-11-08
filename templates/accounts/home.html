@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>AI-powered quizzes for teachers and students</h1>
+  <p class="sub">Teachers generate quizzes with AI and publish them. Students log in and solve them.</p>
+  <p><a class="btn" href="{% url 'login' %}">Login</a></p>
+</div>
+<div class="grid g2">
+  <div class="card">
+    <h2>I am a Student</h2>
+    <p class="muted">Register and choose your teacher. After your teacher approves you by email, log in and solve the quizzes. Results are instant.</p>
+    <a class="btn" href="{% url 'register_student' %}">Register as Student</a>
+  </div>
+  <div class="card">
+    <h2>I am a Teacher</h2>
+    <p class="muted">Create a teacher account, generate quizzes with AI, publish them, and approve your students.</p>
+    <a class="btn sec" href="{% url 'register_teacher' %}">Register as Teacher</a>
+  </div>
+</div>
+{% endblock %}

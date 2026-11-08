@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Review {{ s.display_name }}{% endblock %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<p><a href="{% url 'student_requests' %}">&larr; All students</a></p>
+<div class="card">
+  <div class="row between"><h1>{{ s.display_name }}</h1>
+    <span class="badge {% if s.is_approved %}b-ok{% elif s.is_rejected %}b-bad{% else %}b-warn{% endif %}">{{ s.get_status_display }}</span></div>
+  <table>
+    <tr><th>Username</th><td>{{ s.username }}</td></tr>
+    <tr><th>Email</th><td>{{ s.email }}</td></tr>
+    <tr><th>Registered on</th><td>{{ s.date_joined|date:"d M Y, H:i" }}</td></tr>
+    {% if s.approved_at %}<tr><th>Approved at</th><td>{{ s.approved_at|date:"d M Y, H:i" }}</td></tr>{% endif %}
+    {% if s.rejected_at %}<tr><th>Rejected at</th><td>{{ s.rejected_at|date:"d M Y, H:i" }}</td></tr>
+      <tr><th>Reason</th><td>{{ s.rejection_reason|default:"-" }}</td></tr>{% endif %}
+  </table>
+</div>
+<div class="grid g2">
+  {% if not s.is_approved %}
+  <div class="card"><h2>Approve</h2><p class="muted">Sets status to APPROVED and emails {{ s.email }} with the login link.</p>
+    <form method="post" action="{% url 'student_approve' s.pk %}">{% csrf_token %}<button class="btn ok" type="submit">Approve &amp; send email</button></form></div>
+  {% endif %}
+  {% if not s.is_rejected %}
+  <div class="card"><h2>Reject</h2>
+    <form method="post" action="{% url 'student_reject' s.pk %}">{% csrf_token %}{{ reject_form.reason }}
+      <p><button class="btn bad" type="submit">Reject &amp; send email</button></p></form></div>
+  {% endif %}
+</div>
+{% endblock %}

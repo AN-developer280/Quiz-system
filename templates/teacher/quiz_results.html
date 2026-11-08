@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Results · {{ quiz.title }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'quizzes:quiz_detail' quiz.pk %}">&larr; {{ quiz.title }}</a></p>
+<h1>Results</h1>
+<div class="grid g3" style="margin-bottom:16px">
+  <div class="card stat"><b>{{ count }}</b><span>Submissions</span></div>
+  <div class="card stat"><b>{{ avg }}%</b><span>Average score</span></div>
+</div>
+<div class="card">
+{% if attempts %}
+<table><tr><th>Student</th><th>Score</th><th>%</th><th>Submitted</th><th></th></tr>
+{% for a in attempts %}<tr><td>{{ a.student.display_name }}<div class="muted" style="font-size:.8rem">{{ a.student.email }}</div></td>
+<td>{{ a.score }} / {{ a.total }}</td><td>{{ a.percentage }}%</td><td>{{ a.submitted_at|date:"d M Y, H:i" }}</td>
+<td class="right"><a class="btn sm sec" href="{% url 'quizzes:teacher_attempt' a.pk %}">View answers</a></td></tr>{% endfor %}
+</table>
+{% else %}<p class="muted">No student has submitted this quiz yet.</p>{% endif %}
+</div>
+{% endblock %}

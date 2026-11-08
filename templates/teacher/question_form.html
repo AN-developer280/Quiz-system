@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<p><a href="{% url 'quizzes:quiz_detail' quiz.pk %}">&larr; Back to quiz</a></p>
+<div class="card"><h1>{{ title }}</h1>
+  <form method="post" novalidate>{% csrf_token %}
+    {% if form.non_field_errors %}<div class="msg error">{{ form.non_field_errors }}</div>{% endif %}
+    {% include "_field.html" with field=form.text %}
+    {% include "_field.html" with field=form.option_1 %}
+    {% include "_field.html" with field=form.option_2 %}
+    {% include "_field.html" with field=form.option_3 %}
+    {% include "_field.html" with field=form.option_4 %}
+    <label>Correct option</label>
+    {% for radio in form.correct %}<label class="opt" style="margin-bottom:4px">{{ radio.tag }} {{ radio.choice_label }}</label>{% endfor %}
+    {% for e in form.correct.errors %}<div class="err">{{ e }}</div>{% endfor %}
+    {% include "_field.html" with field=form.explanation %}
+    <p><button class="btn" type="submit">Save question</button></p>
+  </form></div>
+{% endblock %}

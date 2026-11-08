@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Teacher dashboard{% endblock %}
+{% block content %}
+<div class="row between"><div><h1>Welcome, {{ user.display_name }}</h1><p class="sub">Generate quizzes with AI and publish them for students.</p></div>
+<a class="btn" href="{% url 'quizzes:quiz_generate' %}">+ Generate quiz with AI</a></div>
+{% if pending_students %}<div class="msg info">{{ pending_students }} student(s) waiting for your approval. <a href="{% url 'student_requests' %}">Review now</a></div>{% endif %}
+<div class="grid g3" style="margin-bottom:16px">
+  <div class="card stat"><b>{{ published_count }}</b><span>Published</span></div>
+  <div class="card stat"><b>{{ draft_count }}</b><span>Drafts</span></div>
+  <div class="card stat"><b>{{ attempt_total }}</b><span>Student submissions</span></div>
+</div>
+<div class="card">
+  <h2>Your quizzes</h2>
+  {% if quizzes %}
+  <table>
+    <tr><th>Title</th><th>Questions</th><th>Status</th><th>Submissions</th><th></th></tr>
+    {% for q in quizzes %}
+    <tr>
+      <td><a href="{% url 'quizzes:quiz_detail' q.pk %}"><b>{{ q.title }}</b></a><div class="muted" style="font-size:.82rem">{{ q.topic }} · {{ q.get_difficulty_display }}</div></td>
+      <td>{{ q.q_count }}</td>
+      <td><span class="badge {% if q.is_published %}b-ok{% else %}b-mute{% endif %}">{{ q.get_status_display }}</span></td>
+      <td>{{ q.a_count }}</td>
+      <td class="right"><a class="btn sm sec" href="{% url 'quizzes:quiz_detail' q.pk %}">Open</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No quizzes yet. Click “Generate quiz with AI” to create your first one.</p>{% endif %}
+</div>
+{% endblock %}

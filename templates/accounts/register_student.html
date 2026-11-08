@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Student registration · Quiz Portal{% endblock %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Student registration</h1>
+  <p class="sub">Your teacher must approve your registration before you can log in.</p>
+  <form method="post" novalidate>{% csrf_token %}
+    {% if form.non_field_errors %}<div class="msg error">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="two">
+      {% include "_field.html" with field=form.first_name %}
+      {% include "_field.html" with field=form.last_name %}
+      {% include "_field.html" with field=form.username %}
+      {% include "_field.html" with field=form.email %}
+      {% include "_field.html" with field=form.password1 %}
+      {% include "_field.html" with field=form.password2 %}
+    </div>
+    {% include "_field.html" with field=form.teacher %}
+    <p><button class="btn" type="submit">Register</button></p>
+  </form>
+  <p class="muted">Already registered? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock %}

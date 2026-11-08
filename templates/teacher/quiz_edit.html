@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block wrapclass %}mid{% endblock %}
+{% block content %}
+<p><a href="{% url 'quizzes:quiz_detail' quiz.pk %}">&larr; Back to quiz</a></p>
+<div class="card"><h1>Edit quiz details</h1>
+  <form method="post" novalidate>{% csrf_token %}
+    {% for f in form %}{% include "_field.html" with field=f %}{% endfor %}
+    <p><button class="btn" type="submit">Save</button></p>
+  </form></div>
+{% endblock %}

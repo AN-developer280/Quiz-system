@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block wrapclass %}narrow{% endblock %}
+{% block content %}
+<div class="card"><h1>Delete quiz?</h1>
+  <p>“{{ quiz.title }}” and all its questions{% if attempt_count %} and {{ attempt_count }} student attempt(s){% endif %} will be permanently deleted.</p>
+  <form method="post">{% csrf_token %}
+    <button class="btn bad" type="submit">Yes, delete</button>
+    <a class="btn sec" href="{% url 'quizzes:quiz_detail' quiz.pk %}">Cancel</a></form></div>
+{% endblock %}
